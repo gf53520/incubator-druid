@@ -72,6 +72,7 @@ public class TimestampParser
       };
     } else if (format.equalsIgnoreCase("posix")
         || format.equalsIgnoreCase("millis")
+        || format.equalsIgnoreCase("micro")
         || format.equalsIgnoreCase("nano")) {
       final Function<Number, DateTime> numericFun = createNumericTimestampParser(format);
       return input -> {
@@ -106,6 +107,8 @@ public class TimestampParser
     // Ignore millis for ruby
     if (format.equalsIgnoreCase("posix") || format.equalsIgnoreCase("ruby")) {
       return input -> DateTimes.utc(TimeUnit.SECONDS.toMillis(input.longValue()));
+    } else if (format.equalsIgnoreCase("micro")) {
+      return input -> DateTimes.utc(TimeUnit.MICROSECONDS.toMillis(input.longValue()));
     } else if (format.equalsIgnoreCase("nano")) {
       return input -> DateTimes.utc(TimeUnit.NANOSECONDS.toMillis(input.longValue()));
     } else {
