@@ -39,6 +39,7 @@ import io.druid.java.util.common.StringUtils;
 import io.druid.java.util.common.guava.Sequence;
 import io.druid.java.util.common.guava.Yielder;
 import io.druid.java.util.common.guava.Yielders;
+import io.druid.query.DataSource;
 import io.druid.query.GenericQueryMetricsFactory;
 import io.druid.query.Query;
 import io.druid.query.QueryContexts;
@@ -168,6 +169,10 @@ public class QueryResource implements QueryCountStatsProvider
     try {
       queryLifecycle.initialize(readQuery(req, in, context));
       query = queryLifecycle.getQuery();
+
+      String uid = req.getHeader("X-Appid");
+      rewrite(query.getDataSource(), uid);
+
       final String queryId = query.getId();
 
       Thread.currentThread()
@@ -292,6 +297,11 @@ public class QueryResource implements QueryCountStatsProvider
     finally {
       Thread.currentThread().setName(currThreadName);
     }
+  }
+
+  protected void rewrite(DataSource dataSource, String uid)
+  {
+    return;
   }
 
   private static Query<?> readQuery(

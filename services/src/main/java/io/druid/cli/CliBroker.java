@@ -34,6 +34,10 @@ import io.druid.client.cache.CacheMonitor;
 import io.druid.client.selector.CustomTierSelectorStrategyConfig;
 import io.druid.client.selector.ServerSelectorStrategy;
 import io.druid.client.selector.TierSelectorStrategy;
+import io.druid.cube.common.MongoConfig;
+import io.druid.cube.dao.CubeDaoImpl;
+import io.druid.cube.dao.ICubeDao;
+import io.druid.cube.dao.MongoDB;
 import io.druid.discovery.DruidNodeDiscoveryProvider;
 import io.druid.discovery.LookupNodeService;
 import io.druid.guice.CacheModule;
@@ -100,6 +104,10 @@ public class CliBroker extends ServerRunnable
             binder.bind(CachingClusteredClient.class).in(LazySingleton.class);
             binder.bind(BrokerServerView.class).in(LazySingleton.class);
             binder.bind(TimelineServerView.class).to(BrokerServerView.class).in(LazySingleton.class);
+            /*cube 相关*/
+            JsonConfigProvider.bind(binder, "druid.broker.mongo", MongoConfig.class);
+            binder.bind(MongoDB.class);
+            binder.bind(ICubeDao.class).to(CubeDaoImpl.class);
 
             JsonConfigProvider.bind(binder, "druid.broker.cache", CacheConfig.class);
             binder.install(new CacheModule());
@@ -109,6 +117,7 @@ public class CliBroker extends ServerRunnable
             JsonConfigProvider.bind(binder, "druid.broker.balancer", ServerSelectorStrategy.class);
             JsonConfigProvider.bind(binder, "druid.broker.retryPolicy", RetryQueryRunnerConfig.class);
             JsonConfigProvider.bind(binder, "druid.broker.segment", BrokerSegmentWatcherConfig.class);
+
 
             binder.bind(QuerySegmentWalker.class).to(ClientQuerySegmentWalker.class).in(LazySingleton.class);
 

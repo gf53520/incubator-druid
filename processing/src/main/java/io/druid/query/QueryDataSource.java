@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import io.druid.cube.dao.ICubeDao;
 import java.util.List;
 
 @JsonTypeName("query")
@@ -78,5 +79,11 @@ public class QueryDataSource implements DataSource
   public int hashCode()
   {
     return query.hashCode();
+  }
+
+  @Override
+  public void rewrite(String defaultUid, ICubeDao iCubeDao)
+  {
+    this.query.getDataSource().rewrite(defaultUid, iCubeDao);
   }
 }

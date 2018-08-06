@@ -16,26 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package io.druid.cube.dao;
 
-package io.druid.query;
+import io.druid.cube.bean.Cube;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import io.druid.cube.dao.ICubeDao;
-import java.util.List;
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-              include = JsonTypeInfo.As.PROPERTY,
-              property = "type",
-              defaultImpl = LegacyDataSource.class)
-@JsonSubTypes({
-                  @JsonSubTypes.Type(value = TableDataSource.class, name = "table"),
-                  @JsonSubTypes.Type(value = QueryDataSource.class, name = "query"),
-                  @JsonSubTypes.Type(value = UnionDataSource.class, name = "union")
-              })
-public interface DataSource
+/**
+ * Created by tuo on 2018/8/3.
+ */
+public interface ICubeDao
 {
-  List<String> getNames();
-  void rewrite(String defaultUid, ICubeDao iCubeDao);
+  Cube Get(String uid, String name);
 }
