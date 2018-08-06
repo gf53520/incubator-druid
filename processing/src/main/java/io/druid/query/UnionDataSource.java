@@ -27,6 +27,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import io.druid.cube.dao.ICubeDao;
 import java.util.List;
 
 public class UnionDataSource implements DataSource
@@ -94,5 +95,13 @@ public class UnionDataSource implements DataSource
     return "UnionDataSource{" +
            "dataSources=" + dataSources +
            '}';
+  }
+
+  @Override
+  public void rewrite(String defaultUid, ICubeDao iCubeDao)
+  {
+    for (TableDataSource tableDataSource : this.dataSources) {
+      tableDataSource.rewrite(defaultUid, iCubeDao);
+    }
   }
 }

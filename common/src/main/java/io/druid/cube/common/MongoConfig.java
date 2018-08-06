@@ -16,26 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package io.druid.cube.common;
 
-package io.druid.query;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import io.druid.cube.dao.ICubeDao;
-import java.util.List;
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-              include = JsonTypeInfo.As.PROPERTY,
-              property = "type",
-              defaultImpl = LegacyDataSource.class)
-@JsonSubTypes({
-                  @JsonSubTypes.Type(value = TableDataSource.class, name = "table"),
-                  @JsonSubTypes.Type(value = QueryDataSource.class, name = "query"),
-                  @JsonSubTypes.Type(value = UnionDataSource.class, name = "union")
-              })
-public interface DataSource
+/**
+ * Created by tuo on 2018/8/3.
+ */
+public class MongoConfig
 {
-  List<String> getNames();
-  void rewrite(String defaultUid, ICubeDao iCubeDao);
+
+  @JsonProperty
+  private String url = null;
+
+  @JsonProperty
+  private String database = null;
+
+  public String getUrl()
+  {
+    return url;
+  }
+
+  public void setUrl(String url)
+  {
+    this.url = url;
+  }
+
+  public String getDatabase()
+  {
+    return database;
+  }
+
+  public void setDatabase(String database)
+  {
+    this.database = database;
+  }
 }

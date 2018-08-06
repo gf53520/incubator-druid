@@ -25,8 +25,10 @@ import com.google.inject.Inject;
 import com.sun.jersey.spi.container.ResourceFilters;
 import io.druid.client.ServerViewUtil;
 import io.druid.client.TimelineServerView;
+import io.druid.cube.dao.ICubeDao;
 import io.druid.guice.annotations.Json;
 import io.druid.guice.annotations.Smile;
+import io.druid.query.DataSource;
 import io.druid.query.GenericQueryMetricsFactory;
 import io.druid.query.Query;
 import io.druid.server.http.security.StateResourceFilter;
@@ -52,6 +54,7 @@ import java.io.InputStream;
 public class BrokerQueryResource extends QueryResource
 {
   private final TimelineServerView brokerServerView;
+  private final ICubeDao iCubeDao;
 
   @Inject
   public BrokerQueryResource(
@@ -62,7 +65,8 @@ public class BrokerQueryResource extends QueryResource
       AuthConfig authConfig,
       AuthorizerMapper authorizerMapper,
       GenericQueryMetricsFactory queryMetricsFactory,
-      TimelineServerView brokerServerView
+      TimelineServerView brokerServerView,
+      ICubeDao iCubeDao
   )
   {
     super(
@@ -75,6 +79,7 @@ public class BrokerQueryResource extends QueryResource
         queryMetricsFactory
     );
     this.brokerServerView = brokerServerView;
+    this.iCubeDao = iCubeDao;
   }
 
   @POST
@@ -104,5 +109,14 @@ public class BrokerQueryResource extends QueryResource
     catch (Exception e) {
       return context.gotError(e);
     }
+  }
+
+  @Override
+  protected void rewrite(DataSource dataSource, String uid)
+  {
+    if (uid != null) {
+      dataSource.rewrite(uid, this.iCubeDao);
+    }
+    return;
   }
 }

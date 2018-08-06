@@ -22,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import com.google.common.base.Joiner;
+import io.druid.cube.bean.Cube;
+import io.druid.cube.dao.ICubeDao;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +32,7 @@ import java.util.List;
 public class TableDataSource implements DataSource
 {
   @JsonProperty
-  private final String name;
+  private String name;
 
   @JsonCreator
   public TableDataSource(@JsonProperty("name") String name)
@@ -78,5 +81,23 @@ public class TableDataSource implements DataSource
   public int hashCode()
   {
     return name.hashCode();
+  }
+
+  /*
+  dataSource重命名规则：
+  比如用户1380750167,cube:cubeTest
+  通过API传递过来的datasource name有两种格式
+  1. cubeTest
+  2. 1380750167:cubeTest
+ */
+  @Override
+  public void rewrite(String defaultUid, ICubeDao iCubeDao)
+  {
+    if (this.name.contains(":")) {
+      //todo 支持权限；
+    } else {
+      Cube cube = iCubeDao.Get(defaultUid, name);
+      this.name = Joiner.on("_").join(defaultUid, this.name, cube.getVersion());
+    }
   }
 }
