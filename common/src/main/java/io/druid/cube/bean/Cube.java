@@ -18,6 +18,7 @@
  */
 
 package io.druid.cube.bean;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bson.Document;
 import io.druid.java.util.emitter.EmittingLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Created by tuo on 2018/8/3.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cube
 {
   protected static final EmittingLogger log = new EmittingLogger(Cube.class);

@@ -97,7 +97,7 @@ public class TableDataSource implements DataSource
       //todo 支持权限；
     } else {
       Cube cube = iCubeDao.Get(defaultUid, name);
-      this.name = Joiner.on("_").join(defaultUid, this.name, cube.getVersion());
+      this.name = Joiner.on("-").join(defaultUid, this.name, cube.getVersion());
     }
   }
 }
