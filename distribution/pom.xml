@@ -110,6 +110,10 @@
                                 <argument>-c</argument>
                                 <argument>io.druid.extensions:simple-client-sslcontext</argument>
                                 <argument>-c</argument>
+                                <argument>io.druid.extensions:mysql-metadata-storage</argument>
+                                <argument>-c</argument>
+                                <argument>io.druid.extensions.contrib:graphite-emitter</argument>
+                                <argument>-c</argument>
                                 <argument>io.druid.extensions:druid-basic-security</argument>
                                 <argument>${druid.distribution.pulldeps.opts}</argument>
                             </arguments>

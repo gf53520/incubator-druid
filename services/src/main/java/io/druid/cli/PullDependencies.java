@@ -350,7 +350,7 @@ public class PullDependencies implements Runnable
 
       for (Artifact artifact : artifacts) {
         if (!exclusions.contains(artifact.getGroupId())) {
-          log.info("Adding file [%s] at [%s]", artifact.getFile().getName(), toLocation.getAbsolutePath());
+          log.info("Adding file [%s] at [%s]", artifact.getFile().getAbsolutePath(), toLocation.getAbsolutePath());
           FileUtils.copyFileToDirectory(artifact.getFile(), toLocation);
         } else {
           log.debug("Skipped Artifact[%s]", artifact);
